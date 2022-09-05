@@ -8,6 +8,8 @@ import {
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
+import { INotification } from 'src/types';
+
 import {
   useState,
   useEffect,
@@ -16,12 +18,13 @@ import {
 
 import styles from './style';
 
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     handleShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-    shouldShowAlert: false
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowAlert: true
   })
 })
 
@@ -50,7 +53,11 @@ export default function NotificationsApp(){
     }
   })
 
+  const DateConvert = (value: number) => {
+    return new Date(value)
+  }
 
+  console.log(notification);
   return (
     <View
       style={styles.container}
@@ -64,13 +71,13 @@ export default function NotificationsApp(){
         style={styles.notificationDataContent}
       >
         <Text>
-          Title:  
+          Title: { notification && notification?.request.content.title }
         </Text>
         <Text>
-          Body: 
+          Body: { notification && notification?.request.content.body }
         </Text>
         <Text>
-          Data: 
+          Date: { notification && notification?.date }
         </Text>
       </View>
       <Button
@@ -88,9 +95,11 @@ async function schedulePushNotification(){
     content: {
       title: "Olá Acate",
       body: 'Eu sou uma notificação',
-      data: { data: 'Qualquer coisa'}
+      sound: '../../assets/notifications.wav',
+      data: { data: 'Qualquer coisa'},
+      vibrate: [0, 250, 250, 250],
     },
-    trigger: { seconds: 2 }
+    trigger: { seconds: 5 }
   })
 };
 
@@ -118,7 +127,7 @@ async function registerForPushNotificationsAsync(){
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C'
+      lightColor: '#FF231F7C',
     })
   }
 
