@@ -8,5 +8,3 @@ export default function App() {
   // return <BottomNavigation />
   return <DrawerNavigation />
 }
-
-// update
